@@ -1,7 +1,7 @@
 int sensorValue;
 // set dummy values for numeric light indicator
 int sensorLow = 1023;
-int sensorHigh = 0;
+int sensorHigh = 1020;
 int photoresistor = A2;
 
 int buzzer = 8;
@@ -44,6 +44,7 @@ void loop() {
   if (lightValue > 700) {
     // read the sensor value from the A0 port
     sensorValue = analogRead(A0);
+    Serial.println(sensorValue);
 
     // map the sensor value to the frequency:
     // sensorValue-  value to map;
