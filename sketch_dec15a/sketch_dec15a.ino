@@ -2,6 +2,7 @@ int sensorValue;
 // set dummy values for numeric light indicator
 int sensorLow = 1023;
 int sensorHigh = 0;
+int photoresistor = A2;
 
 int buzzer = 8;
 
@@ -10,6 +11,8 @@ const int onboardPin = 13;  // on-board indicator
 
 void setup() {
   Serial.begin(9600);
+  //assigning photoresistor the input
+  pinMode(photoresistor, INPUT);
 
   // use little led on the board to show 5 seconds passing
   pinMode(onboardPin, OUTPUT);
@@ -35,16 +38,24 @@ void setup() {
 }
 
 void loop() {
+
+  //giving photoresistor the assignmeng to drigger the sensor when lightvalue is certain number
+  int lightValue = analogRead(photoresistor);
+  if (lightValue > 700) {
+    // read the sensor value from the A0 port
+    sensorValue = analogRead(A0);
+
+    // map the sensor value to the frequency:
+    // sensorValue-  value to map;
+    // sensorLow and sensorHigh - bounds;
+    // 50 and 4000 - pitch bounds;
+    int pitch = map(sensorValue, sensorLow, sensorHigh, 50, 4000);
+    tone(buzzer, pitch, 20);
+    delay(10);
+
+  } else {
+    noTone(buzzer);
+  }
+
   delay(100);
-
-  // read the sensor value from the A0 port
-  sensorValue = analogRead(A0);
-
-  // map the sensor value to the frequency:
-  // sensorValue-  value to map;
-  // sensorLow and sensorHigh - bounds;
-  // 50 and 4000 - pitch bounds;
-  int pitch = map(sensorValue, sensorLow, sensorHigh, 50, 4000);
-  tone(buzzer, pitch, 20);
-  delay(10);
 }
